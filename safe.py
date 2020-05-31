@@ -1,6 +1,7 @@
 # SAFE TEAM
 # distributed under license: GPL 3 License http://www.gnu.org/licenses/
 
+import os
 from asm_embedding.FunctionAnalyzerRadare import RadareFunctionAnalyzer
 from argparse import ArgumentParser
 from asm_embedding.FunctionNormalizer import FunctionNormalizer
@@ -35,6 +36,7 @@ class SAFE:
 
 
 if __name__ == '__main__':
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
     utils.print_safe()
 

@@ -13,14 +13,14 @@ class SAFEEmbedder:
         self.emb = None
 
     def loadmodel(self):
-        with tf.gfile.GFile(self.model_file, "rb") as f:
-            graph_def = tf.GraphDef()
+        with tf.io.gfile.GFile(self.model_file, "rb") as f:
+            graph_def = tf.compat.v1.GraphDef()
             graph_def.ParseFromString(f.read())
 
         with tf.Graph().as_default() as graph:
             tf.import_graph_def(graph_def)
 
-        sess = tf.Session(graph=graph)
+        sess = tf.compat.v1.Session(graph=graph)
         self.session = sess
 
         return sess
