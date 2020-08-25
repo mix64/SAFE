@@ -106,6 +106,13 @@ class RadareFunctionAnalyzer:
 
         while s < end_address:
             instruction = self.get_instruction()
+            
+            # miss
+            if instruction == None:
+                self.r2.cmd("so 1")
+                s = int(self.r2.cmd("s"), 16)
+                continue
+
             asm += instruction["bytes"]
             if self.arch == 'x86':
                 filtered_instruction = "X_" + RadareFunctionAnalyzer.filter_memory_references(instruction)
