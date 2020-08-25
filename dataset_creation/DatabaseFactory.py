@@ -82,7 +82,17 @@ class DatabaseFactory:
                 print("Aborting due to error:" + str(filename))
                 os.killpg(0, signal.SIGKILL)
 
+        # use the shortest function name (ex. __glibc_malloc, __malloc, malloc)
+        dups = []
+        for f1 in result:
+            for f2 in result:
+                if f1 != f2 and result[f1]['address'] == result[f2]['address'] and len(f1) > len(f2):
+                    dups.append(f1)
+        dups = set(dups)
+
         for func in result:
+            if len(result[func]['filtered_instructions']) < 16 or func in dups:
+                continue
             DatabaseFactory.insert_in_db(db, pool_sem, result[func], filename, func, instruction_converter)
 
         analyzer.close()
