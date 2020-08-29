@@ -1,5 +1,5 @@
-from SAFE_model import modelSAFE
-from parameters import Flags
+from neural_network.SAFE_model import modelSAFE
+from neural_network.parameters import Flags
 import sys
 import os
 import numpy as np

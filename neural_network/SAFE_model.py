@@ -1,8 +1,8 @@
 # SAFE TEAM
 # distributed under license: GPL 3 License http://www.gnu.org/licenses/
 
-from SiameseSAFE import SiameseSelfAttentive
-from PairFactory import PairFactory
+from neural_network.SiameseSAFE import SiameseSelfAttentive
+from neural_network.PairFactory import PairFactory
 import tensorflow as tf
 import random
 import sys, os
