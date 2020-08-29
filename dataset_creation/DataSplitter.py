@@ -30,7 +30,7 @@ class DataSplitter:
     @staticmethod
     def select_similar_cfg(id, provenance, ids, cursor):
         q1 = cursor.execute('SELECT id FROM functions WHERE project=? AND file_name=? and function_name=?', provenance)
-        candidates = [i[0] for i in q1.fetchall() if (i[0] != id and i[0] in ids)]
+        candidates = [i for i in q1.fetchall() if (i != id and i in ids)]
         if len(candidates) == 0:
             return None
         id_similar = random.choice(candidates)
@@ -62,8 +62,8 @@ class DataSplitter:
             id_sim = DataSplitter.select_similar_cfg(my_id, cfg_0_provenance, id_set, cur)
             id_dissim = DataSplitter.select_dissimilar_cfg(ids, cfg_0_provenance, cur)
             if id_sim is not None and id_dissim is not None:
-                true_pair.append((my_id, id_sim))
-                false_pair.append((my_id, id_dissim))
+                true_pair.append((my_id[0], id_sim[0]))
+                false_pair.append((my_id[0], id_dissim[0]))
 
         true_pair = str(json.dumps(true_pair))
         false_pair = str(json.dumps(false_pair))
