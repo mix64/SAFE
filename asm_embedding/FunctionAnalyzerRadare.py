@@ -2,6 +2,7 @@
 # distributed under license: GPL 3 License http://www.gnu.org/licenses/
 import json
 import r2pipe
+import ctypes
 
 
 class RadareFunctionAnalyzer:
@@ -22,7 +23,7 @@ class RadareFunctionAnalyzer:
 
     @staticmethod
     def filter_imm(op):
-        imm = int(op["value"])
+        imm = ctypes.c_int64(op["value"]).value
         if -int(5000) <= imm <= int(5000):
             ret = str(hex(op["value"]))
         else:
@@ -36,11 +37,16 @@ class RadareFunctionAnalyzer:
 
         if op["base"] == 0:
             r = "[" + "MEM" + "]"
+        elif "index" in op:
+            reg_base = str(op["base"])
+            index = str(op["index"])
+            disp = str(ctypes.c_int64(op["disp"]).value)
+            scale = str(ctypes.c_int64(op["scale"]).value)
+            r = '[' + reg_base + "+" + index + "*" + scale + "+" + disp + ']'
         else:
             reg_base = str(op["base"])
-            disp = str(op["disp"])
-            scale = str(op["scale"])
-            r = '[' + reg_base + "*" + scale + "+" + disp + ']'
+            disp = str(ctypes.c_int64(op["disp"]).value)
+            r = '[' + reg_base + "+" + disp + ']'
         return r
 
     @staticmethod
@@ -106,7 +112,7 @@ class RadareFunctionAnalyzer:
 
         while s < end_address:
             instruction = self.get_instruction()
-            
+
             # miss
             if instruction == None:
                 self.r2.cmd("so 1")
@@ -196,6 +202,3 @@ class RadareFunctionAnalyzer:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.r2.quit()
-
-
-
